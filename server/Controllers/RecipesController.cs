@@ -25,5 +25,18 @@ namespace real_all_spice.Controllers
                 return BadRequest(error);
             }
         }
+        [HttpGet]
+        public ActionResult<List<Recipe>> GetRecipes()
+        {
+            try
+            {
+                List<Recipe> recipes = _recipesService.GetRecipes();
+                return recipes;
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+            }
+        }
     }
 }

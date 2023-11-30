@@ -12,4 +12,10 @@ public class RecipesRepository(IDbConnection db)
         Recipe recipe = _db.Query<Recipe>(sql, recipeData).FirstOrDefault();
         return recipe;
     }
+    internal List<Recipe> GetRecipes()
+    {
+        string sql = @"SELECT * FROM recipes;";
+        List<Recipe> recipes = _db.Query<Recipe>(sql).ToList();
+        return recipes;
+    }
 }

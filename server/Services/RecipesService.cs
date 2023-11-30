@@ -7,4 +7,9 @@ public class RecipesService(RecipesRepository recipesRepository)
         Recipe recipe = _repository.AddRecipe(recipeData);
         return recipe;
     }
+    internal List<Recipe> GetRecipes()
+    {
+        List<Recipe> recipes = _repository.GetRecipes();
+        return recipes;
+    }
 }
