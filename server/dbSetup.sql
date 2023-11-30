@@ -10,7 +10,7 @@ CREATE TABLE
 
 CREATE TABLE
     IF NOT EXISTS recipes(
-        id int NOT NULL PRIMARY KEY,
+        id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
         updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
         title CHAR(50) NOT NULL,
@@ -22,3 +22,21 @@ CREATE TABLE
     ) DEFAULT charset utf8 COMMENT '';
 
 DROP TABLE recipes;
+
+INSERT INTO
+    recipes (
+        title,
+        category,
+        instructions,
+        img,
+        creatorId
+    )
+VALUES (
+        'test',
+        'test',
+        'test',
+        'test',
+        '6567cbc6ac990d55b2b2e3fa'
+    );
+
+SELECT * FROM recipes WHERE id =
