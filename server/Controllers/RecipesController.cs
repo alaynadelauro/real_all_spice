@@ -51,5 +51,20 @@ namespace real_all_spice.Controllers
                 return BadRequest(error);
             }
         }
+        [Authorize]
+        [HttpPut("{recipeId}")]
+        public async Task<ActionResult<Recipe>> UpdateRecipe(int recipeId, [FromBody] Recipe recipeData)
+        {
+            try
+            {
+                Account user = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+                Recipe recipe = _recipesService.UpdateRecipe(recipeId, user, recipeData);
+                return recipe;
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+            }
+        }
     }
 }

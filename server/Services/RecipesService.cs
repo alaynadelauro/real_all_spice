@@ -17,4 +17,18 @@ public class RecipesService(RecipesRepository recipesRepository)
         Recipe recipe = _repository.GetRecipeById(recipeId) ?? throw new Exception($"{recipeId} is not a valid ID");
         return recipe;
     }
+    internal RecipesService UpdateRecipe(int recipeId, Account user, Recipe recipeData)
+    {
+        Recipe foundRecipe = GetRecipeById(recipeId);
+        if (foundRecipe.CreatorId != user.Id) ;
+        {
+            throw new Exception("This is not your Recipe to update");
+        }
+        foundRecipe.Title = recipeData.Title ?? foundRecipe.Title;
+        foundRecipe.Instructions = recipeData.Instructions ?? foundRecipe.Instructions;
+        foundRecipe.Img = recipeData.Img ?? foundRecipe.Img;
+        foundRecipe.Category = recipeData.Category ?? foundRecipe.Category;
+        _repository.UpdateRecipe(recipeId, foundRecipe);
+        return foundRecipe;
+    }
 }

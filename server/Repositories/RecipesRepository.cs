@@ -24,4 +24,14 @@ public class RecipesRepository(IDbConnection db)
         Recipe recipe = _db.Query<Recipe>(sql, new { recipeId }).FirstOrDefault();
         return recipe;
     }
+    internal void UpdateRecipe(int recipeId, Recipe foundRecipe)
+    {
+        string sql = @"UPDATE recipes SET
+        title = @Title,
+        instructions = @Instructions,
+        img = @Img,
+        category = @Category
+        WHERE id = @recipeId;";
+        _db.Execute(sql, foundRecipe);
+    }
 }
