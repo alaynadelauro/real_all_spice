@@ -18,4 +18,10 @@ public class RecipesRepository(IDbConnection db)
         List<Recipe> recipes = _db.Query<Recipe>(sql).ToList();
         return recipes;
     }
+    internal Recipe GetRecipeById(int recipeId)
+    {
+        string sql = "SELECT * FROM recipes WHERE id = @recipeId;";
+        Recipe recipe = _db.Query<Recipe>(sql, new { recipeId }).FirstOrDefault();
+        return recipe;
+    }
 }

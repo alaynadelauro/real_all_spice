@@ -38,5 +38,18 @@ namespace real_all_spice.Controllers
                 return BadRequest(error);
             }
         }
+        [HttpGet("{recipeId}")]
+        public ActionResult<Recipe> GetRecipeById(int recipeId)
+        {
+            try
+            {
+                Recipe recipe = _recipesService.GetRecipeById(recipeId);
+                return recipe;
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+            }
+        }
     }
 }

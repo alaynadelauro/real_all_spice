@@ -12,4 +12,9 @@ public class RecipesService(RecipesRepository recipesRepository)
         List<Recipe> recipes = _repository.GetRecipes();
         return recipes;
     }
+    internal Recipe GetRecipeById(int recipeId)
+    {
+        Recipe recipe = _repository.GetRecipeById(recipeId) ?? throw new Exception($"{recipeId} is not a valid ID");
+        return recipe;
+    }
 }
