@@ -23,6 +23,15 @@ CREATE TABLE
 
 DROP TABLE recipes;
 
+CREATE TABLE
+    IF NOT EXISTS ingredients(
+        id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        name CHAR(50) NOT NULL,
+        quantity INT NOT NULL,
+        recipeId INT NOT NULL,
+        FOREIGN KEY (recipeId) REFERENCES recipes(id)
+    ) DEFAULT charset utf8 COMMENT '';
+
 INSERT INTO
     recipes (
         title,
@@ -38,5 +47,3 @@ VALUES (
         'test',
         '6567cbc6ac990d55b2b2e3fa'
     );
-
-SELECT * FROM recipes WHERE id =

@@ -14,21 +14,35 @@ public class RecipesService(RecipesRepository recipesRepository)
     }
     internal Recipe GetRecipeById(int recipeId)
     {
-        Recipe recipe = _repository.GetRecipeById(recipeId) ?? throw new Exception($"{recipeId} is not a valid ID");
+        Recipe recipe = _repository.GetRecipeById(recipeId);
+        if (recipe == null)
+        {
+            throw new Exception($"{recipeId} is not a valid ID");
+        };
         return recipe;
     }
-    internal RecipesService UpdateRecipe(int recipeId, Account user, Recipe recipeData)
+    internal Recipe UpdateRecipe(int recipeId, Account user, Recipe recipeData)
     {
         Recipe foundRecipe = GetRecipeById(recipeId);
-        if (foundRecipe.CreatorId != user.Id) ;
+        if (foundRecipe.CreatorId != user.Id)
         {
-            throw new Exception("This is not your Recipe to update");
+            throw new Exception("Not your recipe");
         }
         foundRecipe.Title = recipeData.Title ?? foundRecipe.Title;
         foundRecipe.Instructions = recipeData.Instructions ?? foundRecipe.Instructions;
         foundRecipe.Img = recipeData.Img ?? foundRecipe.Img;
         foundRecipe.Category = recipeData.Category ?? foundRecipe.Category;
-        _repository.UpdateRecipe(recipeId, foundRecipe);
-        return foundRecipe;
+        Recipe recipe = _repository.UpdateRecipe(foundRecipe);
+        return recipe;
+    }
+    internal string RemoveRecipe(int recipeId, string userId)
+    {
+        Recipe foundRecipe = GetRecipeById(recipeId);
+        if (foundRecipe.CreatorId != userId)
+        {
+            throw new Exception("The user doesn't have the same id as the creator of this recipe");
+        }
+        _repository.RemoveRecipe(recipeId);
+        return "Recipe has been deleted";
     }
 }

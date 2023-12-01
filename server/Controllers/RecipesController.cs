@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace real_all_spice.Controllers
 {
     [ApiController]
@@ -22,7 +20,7 @@ namespace real_all_spice.Controllers
             }
             catch (Exception error)
             {
-                return BadRequest(error);
+                return BadRequest(error.Message);
             }
         }
         [HttpGet]
@@ -35,7 +33,7 @@ namespace real_all_spice.Controllers
             }
             catch (Exception error)
             {
-                return BadRequest(error);
+                return BadRequest(error.Message);
             }
         }
         [HttpGet("{recipeId}")]
@@ -48,7 +46,7 @@ namespace real_all_spice.Controllers
             }
             catch (Exception error)
             {
-                return BadRequest(error);
+                return BadRequest(error.Message);
             }
         }
         [Authorize]
@@ -63,7 +61,23 @@ namespace real_all_spice.Controllers
             }
             catch (Exception error)
             {
-                return BadRequest(error);
+                return BadRequest(error.Message);
+            }
+        }
+        [Authorize]
+        [HttpDelete("{recipeId}")]
+        public async Task<ActionResult<string>> RemoveRecipe(int recipeId)
+        {
+            try
+            {
+                Account user = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+                string userId = user.Id;
+                string res = _recipesService.RemoveRecipe(recipeId, userId);
+                return Ok(res);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error.Message);
             }
         }
     }
