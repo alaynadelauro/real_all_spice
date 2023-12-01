@@ -19,5 +19,18 @@ public class IngredientsController(IngredientsService ingredientsService) : Cont
             return BadRequest(error.Message);
         }
     }
+    [HttpDelete("{ingredientId}")]
+    public ActionResult<string> RemoveIngredient(int ingredientId)
+    {
+        try
+        {
+            string res = _ingredientService.RemoveIngredient(ingredientId);
+            return Ok(res);
+        }
+        catch (Exception error)
+        {
+            return BadRequest(error.Message);
+        }
+    }
 }
 

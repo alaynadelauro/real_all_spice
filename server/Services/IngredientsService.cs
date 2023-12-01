@@ -12,4 +12,9 @@ public class IngredientsService(IngredientsRepository ingredientsRepository)
         List<Ingredient> ingredients = _repo.GetRecipeIngredients(recipeId);
         return ingredients;
     }
+    internal string RemoveIngredient(int ingredientId)
+    {
+        _repo.RemoveIngredient(ingredientId);
+        return "Your ingredient has been removed";
+    }
 }
