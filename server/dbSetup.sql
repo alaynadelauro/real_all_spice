@@ -34,6 +34,18 @@ CREATE TABLE
 
 DROP TABLE ingredients;
 
+CREATE TABLE
+    IF NOT EXISTS favorites(
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        accountID VARCHAR(255) NOT NULL,
+        recipeId int NOT NULL,
+        Foreign Key (accountId) REFERENCES accounts(id) ON DELETE CASCADE,
+        FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
+        UNIQUE(accountId, recipeId)
+    ) DEFAULT charset utf8 COMMENT '';
+
+DROP TABLE favorites;
+
 INSERT INTO
     recipes (
         title,
