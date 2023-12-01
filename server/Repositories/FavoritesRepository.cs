@@ -24,4 +24,15 @@ public class FavoritesRepository(IDbConnection db)
         }, new { userId }).ToList();
         return favorites;
     }
+    internal Favorite GetFavoriteById(string userId)
+    {
+        string sql = "SELECT * FROM favorites WHERE accountId = @userId;";
+        Favorite favorite = _db.Query<Favorite>(sql, new { userId }).FirstOrDefault();
+        return favorite;
+    }
+    internal void Unlike(int favoriteId)
+    {
+        string sql = "DELETE FROM favorites WHERE id = @favoriteId LIMIT 1;";
+        _db.Execute(sql, new { favoriteId });
+    }
 }

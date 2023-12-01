@@ -20,7 +20,21 @@ public class FavoritesController(Auth0Provider auth0Provider, FavoritesService f
         {
             return BadRequest(error.Message);
         }
-
-
+    }
+    [Authorize]
+    [HttpDelete("{favoriteId}")]
+    public async Task<ActionResult<string>> Unlike(int favoriteId)
+    {
+        try
+        {
+            Account user = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+            string userId = user.Id;
+            string res = _favoritesService.Unlike(favoriteId, userId);
+            return res;
+        }
+        catch (Exception error)
+        {
+            return BadRequest(error.Message);
+        }
     }
 }
