@@ -14,11 +14,8 @@ public class RecipesService(RecipesRepository recipesRepository)
     }
     internal Recipe GetRecipeById(int recipeId)
     {
-        Recipe recipe = _repository.GetRecipeById(recipeId);
-        if (recipe == null)
-        {
-            throw new Exception($"{recipeId} is not a valid ID");
-        };
+        Recipe recipe = _repository.GetRecipeById(recipeId) ?? throw new Exception($"{recipeId} is not a valid ID");
+        ;
         return recipe;
     }
     internal Recipe UpdateRecipe(int recipeId, Account user, Recipe recipeData)

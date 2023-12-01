@@ -27,10 +27,12 @@ CREATE TABLE
     IF NOT EXISTS ingredients(
         id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
         name CHAR(50) NOT NULL,
-        quantity INT NOT NULL,
+        quantity CHAR(255) NOT NULL,
         recipeId INT NOT NULL,
         FOREIGN KEY (recipeId) REFERENCES recipes(id)
     ) DEFAULT charset utf8 COMMENT '';
+
+DROP TABLE ingredients;
 
 INSERT INTO
     recipes (
