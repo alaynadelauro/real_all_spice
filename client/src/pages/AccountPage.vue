@@ -1,8 +1,11 @@
 <template>
-  <div class="about text-center">
-    <h1>Welcome {{ account.name }}</h1>
-    <img class="rounded" :src="account.picture" alt="" />
-    <p>{{ account.email }}</p>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 p-3 d-flex align-items-center">
+        <img :src="account.picture" class="me-3 rounded-circle account-image">
+        <h3 class="imported-font">{{ account.name }}</h3>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,7 +22,12 @@ export default {
 </script>
 
 <style scoped>
-img {
-  max-width: 100px;
+.imported-font {
+  font-family: 'Potta One';
+}
+
+.account-image {
+  object-fit: cover;
+  object-position: center;
 }
 </style>

@@ -23,6 +23,14 @@ public class AccountController(AccountService accountService, Auth0Provider auth
     }
   }
   [Authorize]
+  [HttpPut("{accountId}")]
+  public async Task<ActionResult<Account>> EditAccount(string accountId, [FromBody] Account accountData)
+  {
+    Account user = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+    Account account = _accountService.EditAccount(user, accountId, accountData);
+    return account;
+  }
+  [Authorize]
   [HttpGet("favorites")]
   public async Task<ActionResult<List<RecipeFavorite>>> GetAccountFavorites()
   {

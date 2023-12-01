@@ -1,13 +1,8 @@
 namespace real_all_spice.Services;
 
-public class AccountService
+public class AccountService(AccountsRepository repo)
 {
-  private readonly AccountsRepository _repo;
-
-  public AccountService(AccountsRepository repo)
-  {
-    _repo = repo;
-  }
+  private readonly AccountsRepository _repo = repo;
 
   internal Account GetProfileByEmail(string email)
   {
@@ -23,12 +18,24 @@ public class AccountService
     }
     return profile;
   }
-
-  internal Account Edit(Account editData, string userEmail)
+  // NOTE I started writing out my own before I saw this
+  // internal Account Edit(Account editData, string userEmail)
+  // {
+  //   Account original = GetProfileByEmail(userEmail);
+  //   original.Name = editData.Name?.Length > 0 ? editData.Name : original.Name;
+  //   original.Picture = editData.Picture?.Length > 0 ? editData.Picture : original.Picture;
+  //   return _repo.Edit(original);
+  // }
+  internal Account EditAccount(Account user, string accountId, Account accountData)
   {
-    Account original = GetProfileByEmail(userEmail);
-    original.Name = editData.Name?.Length > 0 ? editData.Name : original.Name;
-    original.Picture = editData.Picture?.Length > 0 ? editData.Picture : original.Picture;
-    return _repo.Edit(original);
+    if (user.Id != accountId)
+    {
+      throw new Exception("Either you are not logged in or this is not your account");
+    }
+    Account account = GetProfileByEmail(user.Email);
+    account.Picture = accountData.Picture ?? account.Picture;
+    account.Name = accountData.Name ?? account.Name;
+    Account updatedAccount = _repo.EditAccount(account);
+    return updatedAccount;
   }
 }
