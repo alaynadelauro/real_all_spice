@@ -6,7 +6,6 @@ namespace real_all_spice.Controllers
     {
         private readonly Auth0Provider _auth0Provider = auth0Provider;
         private readonly IngredientsService _ingredientService = ingredientsService;
-        [Authorize]
         [HttpPost]
         public ActionResult<Ingredient> AddIngredient([FromBody] Ingredient ingredientData)
         {
