@@ -2,10 +2,11 @@ namespace real_all_spice.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RecipesController(Auth0Provider auth0Provider, RecipesService recipesService) : ControllerBase
+    public class RecipesController(Auth0Provider auth0Provider, RecipesService recipesService, IngredientsService ingredientsService) : ControllerBase
     {
         private readonly Auth0Provider _auth0Provider = auth0Provider;
         private readonly RecipesService _recipesService = recipesService;
+        private readonly IngredientsService _ingredientsService = ingredientsService;
 
         [Authorize]
         [HttpPost]
@@ -74,6 +75,19 @@ namespace real_all_spice.Controllers
                 string userId = user.Id;
                 string res = _recipesService.RemoveRecipe(recipeId, userId);
                 return Ok(res);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error.Message);
+            }
+        }
+        [HttpGet("{recipeId}/ingredients")]
+        public ActionResult<List<Ingredient>> GetRecipeIngredients(int recipeId)
+        {
+            try
+            {
+                List<Ingredient> ingredients = _ingredientsService.GetRecipeIngredients(recipeId);
+                return Ok(ingredients);
             }
             catch (Exception error)
             {

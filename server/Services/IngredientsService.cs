@@ -7,4 +7,9 @@ public class IngredientsService(IngredientsRepository ingredientsRepository)
         Ingredient ingredient = _repo.AddIngredient(ingredientData);
         return ingredient;
     }
+    internal List<Ingredient> GetRecipeIngredients(int recipeId)
+    {
+        List<Ingredient> ingredients = _repo.GetRecipeIngredients(recipeId);
+        return ingredients;
+    }
 }
