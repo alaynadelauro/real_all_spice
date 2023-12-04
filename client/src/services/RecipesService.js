@@ -12,5 +12,13 @@ class RecipesService {
             logger.error(error)
         }
     }
+    async deleteRecipe(recipeId) {
+        try {
+            await api.delete(`api/recipes/${recipeId}`)
+            AppState.recipes = AppState.recipes.filter(recipe => recipe.id != recipeId)
+        } catch (error) {
+            logger.error(error)
+        }
+    }
 }
 export const recipesService = new RecipesService()

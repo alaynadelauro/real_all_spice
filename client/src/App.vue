@@ -31,4 +31,15 @@ export default {
 main {
   background-image: linear-gradient(white, blue);
 }
+
+::-webkit-scrollbar {
+  background-color: blue;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 1px solid black;
+  box-shadow: 0px 0px 2px inset black;
+  border-radius: 10px;
+  background-color: blue;
+}
 </style>

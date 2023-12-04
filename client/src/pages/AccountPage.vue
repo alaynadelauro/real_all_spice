@@ -10,6 +10,7 @@
       </div>
     </div>
     <FavoriteCardVue />
+    <AccountRecipe />
   </div>
   <div v-else-if="!account" class="container-fluid">
     <h1>Loading <i class="mdi mdi-loading mdi-spin"></i></h1>
@@ -52,17 +53,28 @@ import { accountService } from '../services/AccountService';
 import { Modal } from 'bootstrap';
 import FavoriteCardVue from '../components/FavoriteCard.vue'
 import { favoritesService } from '../services/FavoritesService.js';
+import AccountRecipe from '../components/AccountRecipe.vue';
+import { recipesService } from '../services/RecipesService';
 export default {
   setup() {
     const editable = ref({})
     onMounted(() => {
-      getFavorites()
+      getFavorites(),
+        getAccountRecipes()
     })
     async function getFavorites() {
       try {
         // debugger
         await favoritesService.getFavorites()
-        logger.log(AppState.favorites)
+        // logger.log(AppState.favorites)
+      } catch (error) {
+        Pop.error(error)
+        logger.error(error)
+      }
+    }
+    async function getAccountRecipes() {
+      try {
+        await recipesService.getRecipes()
       } catch (error) {
         Pop.error(error)
         logger.error(error)
@@ -72,6 +84,9 @@ export default {
       editable,
       account: computed(() => AppState.account),
       favorites: computed(() => AppState.favorites),
+      recipes: computed(() => {
+        AppState.recipes.filter((recipe) => recipe.creatorId == AppState.account.id)
+      }),
       async EditAccount() {
         try {
           const accountId = AppState.account.id
@@ -85,7 +100,7 @@ export default {
       }
     }
   },
-  components: { FavoriteCardVue }
+  components: { FavoriteCardVue, AccountRecipe }
 }
 </script>
 
