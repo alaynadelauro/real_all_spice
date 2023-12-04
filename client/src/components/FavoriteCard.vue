@@ -3,9 +3,9 @@
         <div class="col-9">
             <h3> {{ account.name }}'s favorites: </h3>
         </div>
-        <div v-for="favorite in favorites" :key="favorite.favoriteId" class="col-4">
-            <img :src="favorite.img" />
-            <h1>{{ favorite.title }}</h1>
+        <div v-for="favorite in favorites" :key="favorite.favoriteId" class="m-1 p-2 rounded col-md-3 col-9 d-flex flex-column justify-content-center favorite-card">
+            <img :src="favorite.img" class="favorite-img rounded" />
+            <h3 class="text-center">{{ favorite.title }}</h3>
         </div>
     </div>
     <div v-else-if="!favorites" class="row justify-content-center mt-5 text-center">
@@ -22,26 +22,24 @@ import { logger } from '../utils/Logger';
 
 export default {
     setup() {
-        onMounted(() => {
-            getFavorites()
-        })
-        async function getFavorites() {
-            try {
-                // debugger
-                await favoritesService.getFavorites()
-                logger.log(AppState.favorites)
-            } catch (error) {
-                Pop.error(error)
-                logger.error(error)
-            }
-            return {
-                favorites: computed(() => AppState.favorites),
-                account: computed(() => AppState.account)
-            }
+        return {
+            account: computed(() => AppState.account),
+            favorites: computed(() => AppState.favorites)
         }
     }
 }
 </script>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.favorite-img {
+    height: 10rem;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    object-position: center;
+}
+
+.favorite-card {
+    background-color: rgba(245, 245, 245, 0.385);
+}
+</style>

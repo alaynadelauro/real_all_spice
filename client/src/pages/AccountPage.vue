@@ -44,19 +44,34 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { AppState } from '../AppState.js';
 import Pop from '../utils/Pop';
 import { logger } from '../utils/Logger';
 import { accountService } from '../services/AccountService';
 import { Modal } from 'bootstrap';
 import FavoriteCardVue from '../components/FavoriteCard.vue'
+import { favoritesService } from '../services/FavoritesService.js';
 export default {
   setup() {
     const editable = ref({})
+    onMounted(() => {
+      getFavorites()
+    })
+    async function getFavorites() {
+      try {
+        // debugger
+        await favoritesService.getFavorites()
+        logger.log(AppState.favorites)
+      } catch (error) {
+        Pop.error(error)
+        logger.error(error)
+      }
+    }
     return {
       editable,
       account: computed(() => AppState.account),
+      favorites: computed(() => AppState.favorites),
       async EditAccount() {
         try {
           const accountId = AppState.account.id

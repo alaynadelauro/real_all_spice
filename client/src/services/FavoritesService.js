@@ -8,9 +8,9 @@ class FavoritesService {
         try {
             // debugger
             const res = await api.get('account/favorites')
-            logger.log(res.data)
+            // logger.log(res.data)
             AppState.favorites = res.data.map((favorite) => new Favorite(favorite))
-            logger.log(AppState.favorites)
+            // logger.log(AppState.favorites)
         } catch (error) {
             logger.error(error)
         }

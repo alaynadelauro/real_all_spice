@@ -1,43 +1,62 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 card align-items-center shadow rounded elevation-3">
-      <img src="https://bcw.blob.core.windows.net/public/img/8600856373152463" alt="CodeWorks Logo"
-        class="rounded-circle">
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-5 title-card rounded-pill mt-3 p-3 text-center">
+        <h1>All Spice</h1>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-9 title-card rounded-pill text-center mt-5 p-2">
+          <p class="mb-0">Categories: cleese, italian, soup, mexican, specialty coffee</p>
+        </div>
+      </div>
+      <div class="row mt-3 justify-content-center" v-if="recipes">
+        <div class="col-3 m-1 title-card rounded m-1 p-2" v-for="recipe in recipes " :key="recipe.id">
+          <img :src="recipe.img" class="recipe-img w-100">
+          <p class="mb-0 text-center">{{ recipe.title }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { computed, onMounted } from 'vue';
+import Pop from '../utils/Pop';
+import { logger } from '../utils/Logger';
+import { AppState } from '../AppState.js';
+import { recipesService } from '../services/RecipesService.js'
+
 export default {
   setup() {
+    onMounted(() => {
+      getRecipes()
+    })
+    async function getRecipes() {
+      try {
+        await recipesService.getRecipes()
+        // logger.log(AppState.recipes)
+      } catch (error) {
+        Pop.error(error)
+        logger.error(error)
+      }
+    }
     return {
-      
+      recipes: computed(() => AppState.recipes)
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.home {
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
+.title-card {
+  background-color: rgba(245, 245, 245, 0.385);
+  font-family: 'potta one';
+  box-shadow: 5px 4px 7px blue;
+}
 
-  .home-card {
-    width: clamp(500px, 50vw, 100%);
-
-    >img {
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
+.recipe-img {
+  object-fit: cover;
+  object-position: center;
+  max-height: 10rem;
 }
 </style>
