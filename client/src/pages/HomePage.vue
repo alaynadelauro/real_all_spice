@@ -4,15 +4,15 @@
       <div class="col-5 title-card rounded-pill mt-3 p-3 text-center">
         <h1>All Spice</h1>
       </div>
-      <div class="row justify-content-center">
-        <div class="col-9 title-card rounded-pill text-center mt-5 p-2">
-          <p class="mb-0">Categories: cleese, italian, soup, mexican, specialty coffee</p>
+      <div class="row justify-content-center title-card rounded-pill text-center mt-5 p-3">
+        <div class="col-md-2 col-9" v-for="category in categories" :key="category">
+          <p class="mb-0 title-card rounded-pill text-center m-1 p-2" @click="changeCategory(category)">{{ category }}</p>
         </div>
       </div>
-      <div class="row mt-3 justify-content-center" v-if="recipes">
-        <div class="col-3 m-1 title-card rounded m-1 p-2" v-for="recipe in recipes " :key="recipe.id">
+      <div class="row mt-3 justify-content-evenly" v-if="recipes">
+        <div class="col-md-3 col-sm-9 m-1 title-card rounded m-1 p-2" v-for="recipe in recipes " :key="recipe.id">
           <img :src="recipe.img" class="recipe-img w-100">
-          <p class="mb-0 text-center">{{ recipe.title }}</p>
+          <p class="mb-0 text-center" type="button">{{ recipe.title }}</p>
         </div>
       </div>
     </div>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Pop from '../utils/Pop';
 import { logger } from '../utils/Logger';
 import { AppState } from '../AppState.js';
@@ -28,6 +28,8 @@ import { recipesService } from '../services/RecipesService.js'
 
 export default {
   setup() {
+    const categories = ["All", "Cheese", "Italian", "Soup", "Mexican", "Specialty Coffee"];
+    const filteredCategory = ref("");
     onMounted(() => {
       getRecipes()
     })
@@ -41,7 +43,20 @@ export default {
       }
     }
     return {
-      recipes: computed(() => AppState.recipes)
+      categories,
+      recipes: computed(() => {
+        if (filteredCategory.value) {
+          return AppState.recipes.filter((recipe) => recipe.category == filteredCategory.value)
+        } else { return AppState.recipes }
+      }),
+      changeCategory(category) {
+        logger.log("button clicked", filteredCategory.value)
+        filteredCategory.value = category
+        if (filteredCategory.value == "All") {
+          filteredCategory.value = null
+          return
+        }
+      }
     }
   }
 }
