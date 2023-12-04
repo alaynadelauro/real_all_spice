@@ -5,7 +5,11 @@
             <div class="row justify-content-evenly height-and-scroll">
                 <div v-for="favorite in favorites" :key="favorite.favoriteId" class=" m-1 p-2 rounded col-md-3 col-9 favorite-card">
                     <img :src="favorite.img" class="favorite-img rounded w-100" />
-                    <h3 class="text-center">{{ favorite.title }}</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="text-center mb-0">{{ favorite.title }}</h5>
+                        <button class="btn text-danger" title="unfavorite" @click="unfavorite(favorite.favoriteId)"><i class="mdi mdi-heart-broken"></i></button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -21,12 +25,23 @@ import { computed, onMounted } from 'vue';
 import { favoritesService } from '../services/FavoritesService';
 import { AppState } from '../AppState.js';
 import { logger } from '../utils/Logger';
+import Pop from '../utils/Pop';
 
 export default {
     setup() {
         return {
             account: computed(() => AppState.account),
-            favorites: computed(() => AppState.favorites)
+            favorites: computed(() => AppState.favorites),
+            async unfavorite(favoriteId) {
+                try {
+                    const yes = await Pop.confirm("Are you sure you don't like this recipe anymore?")
+                    if (!yes) { return }
+                    await favoritesService.unfavorite(favoriteId)
+                } catch (error) {
+                    Pop.error(error)
+                    logger.error(error)
+                }
+            }
         }
     }
 }

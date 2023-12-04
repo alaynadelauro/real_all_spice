@@ -15,6 +15,14 @@ class FavoritesService {
             logger.error(error)
         }
     }
+    async unfavorite(favoriteId) {
+        try {
+            await api.delete(`api/favorites/${favoriteId}`)
+            AppState.favorites = AppState.favorites.filter(favorite => favorite.favoriteId != favoriteId)
+        } catch (error) {
+            logger.error(error)
+        }
+    }
 }
 
 export const favoritesService = new FavoritesService()
