@@ -20,5 +20,13 @@ class RecipesService {
             logger.error(error)
         }
     }
+    async updateRecipe(recipeId, recipeData) {
+        try {
+            const res = await api.put(`api/recipes/${recipeId}`, recipeData)
+            AppState.activeRecipe = new Recipe(res.data)
+        } catch (error) {
+            logger.error(error)
+        }
+    }
 }
 export const recipesService = new RecipesService()

@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success text-light" @click="changeModal()">Edit</button>
+                    <button v-if="recipe.creatorId == account.id" type="button" class="btn btn-success text-light" @click="changeModal()">Edit</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -40,6 +40,7 @@ export default {
     setup() {
         return {
             recipe: computed(() => AppState.activeRecipe),
+            account: computed(() => AppState.account),
             changeModal() {
                 Modal.getOrCreateInstance('#activeRecipeModal').hide()
                 Modal.getOrCreateInstance('#editRecipeModal').show()
