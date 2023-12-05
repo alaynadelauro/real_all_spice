@@ -5,6 +5,7 @@
   <main>
     <router-view />
     <ActiveRecipeModal />
+    <EditRecipeModal />
   </main>
 </template>
 
@@ -13,6 +14,7 @@ import { computed } from 'vue'
 import { AppState } from './AppState'
 import Navbar from './components/Navbar.vue'
 import ActiveRecipeModal from './components/ActiveRecipeModal.vue'
+import EditRecipeModal from './components/EditRecipeModal.vue'
 
 export default {
   setup() {
@@ -20,7 +22,7 @@ export default {
       appState: computed(() => AppState)
     }
   },
-  components: { Navbar, ActiveRecipeModal }
+  components: { Navbar, ActiveRecipeModal, EditRecipeModal }
 }
 </script>
 <style lang="scss">

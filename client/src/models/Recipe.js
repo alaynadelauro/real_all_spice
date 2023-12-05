@@ -6,7 +6,8 @@ export class Recipe {
         this.img = data.img
         this.category = data.category
         this.creatorId = data.creatorId
-        this.createdAt = data.createdAt
-        this.updatedAt = data.updatedAt
+        this.creator = data.creator
+        this.createdAt = data.createdAt.toLocaleString()
+        this.updatedAt = data.updatedAt.toLocaleString()
     }
 }
