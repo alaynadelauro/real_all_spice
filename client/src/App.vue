@@ -4,6 +4,7 @@
   </header>
   <main>
     <router-view />
+    <ActiveRecipeModal />
   </main>
 </template>
 
@@ -11,6 +12,7 @@
 import { computed } from 'vue'
 import { AppState } from './AppState'
 import Navbar from './components/Navbar.vue'
+import ActiveRecipeModal from './components/ActiveRecipeModal.vue'
 
 export default {
   setup() {
@@ -18,7 +20,7 @@ export default {
       appState: computed(() => AppState)
     }
   },
-  components: { Navbar }
+  components: { Navbar, ActiveRecipeModal }
 }
 </script>
 <style lang="scss">

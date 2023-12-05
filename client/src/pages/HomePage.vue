@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="row mt-3 justify-content-evenly" v-if="recipes">
-        <div class="col-md-3 col-sm-9 m-1 title-card rounded m-1 p-2" v-for="recipe in recipes " :key="recipe.id">
+        <div class="col-md-3 col-sm-9 m-1 title-card rounded m-1 p-2" v-for="recipe in recipes" :key="recipe.id" @click="SetActiveRecipe(recipe.id)" type="button" data-bs-toggle="modal" data-bs-target="#activeRecipeModal">
           <img :src="recipe.img" class="recipe-img w-100">
           <p class="mb-0 text-center">{{ recipe.title }}</p>
         </div>
@@ -24,7 +24,8 @@ import { computed, onMounted, ref } from 'vue';
 import Pop from '../utils/Pop';
 import { logger } from '../utils/Logger';
 import { AppState } from '../AppState.js';
-import { recipesService } from '../services/RecipesService.js'
+import { recipesService } from '../services/RecipesService.js';
+import { Modal } from 'bootstrap';
 
 export default {
   setup() {
@@ -56,6 +57,18 @@ export default {
         if (filteredCategory.value == "All") {
           filteredCategory.value = null
           return
+        }
+      },
+      async SetActiveRecipe(recipeId) {
+        try {
+          const foundRecipe = AppState.recipes.find(recipe => recipe.id == recipeId)
+          if (!foundRecipe) {
+            Pop.error("something went wrong, recipe was not found")
+          } else { AppState.activeRecipe = foundRecipe }
+          // logger.log(AppState.activeRecipe)
+        } catch (error) {
+          Pop.error(error)
+          logger.error(error)
         }
       }
     }
