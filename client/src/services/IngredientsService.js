@@ -12,6 +12,22 @@ class IngredientsService {
             logger.error(error)
         }
     }
+    async addIngredient(ingredientData) {
+        try {
+            const res = await api.post(`api/ingredients`, ingredientData)
+            AppState.ingredients.unshift(new Ingredient(res.data))
+        } catch (error) {
+            logger.error(error)
+        }
+    }
+    async removeIngredient(ingredientId) {
+        try {
+            await api.delete(`api/ingredients/${ingredientId}`)
+            AppState.ingredients = AppState.ingredients.filter(ingredient => ingredient.id != ingredientId)
+        } catch (error) {
+            logger.error(error)
+        }
+    }
 }
 
 export const ingredientsService = new IngredientsService()

@@ -19,8 +19,26 @@
                             </select>
                         </div>
                         <div>
-                            <label for="img" class=" col-12 form-label">Link to Image:</label>
+                            <label for="img" class="col-12 form-label">Link to Image:</label>
                             <input v-model="editable.img" type="text" maxlength="500" class="form-control" :placeholder="activeRecipe.img">
+                        </div>
+                        <form @submit.prevent="addIngredient()">
+                            <p class="form-label fw-bold mt-2">Add Ingredient:</p>
+                            <div>
+                                <label for="name" class="col-12 form-label">Ingredient Name:</label>
+                                <input v-model="ingredient.name" type="text" maxlength="50" class="form-control">
+                            </div>
+                            <div>
+                                <label for="quantity" class="col-12 form-label">Quantity:</label>
+                                <input v-model="ingredient.quantity" type="text" maxlength="255" class="form-control">
+                            </div>
+                            <div class="d-flex justify-content-end mt-1">
+                                <button type="submit" class="btn btn-success"><i class="mdi mdi-plus"></i></button>
+                            </div>
+                        </form>
+                        <div v-for="recipeIngredient in recipeIngredients" class="d-flex my-1 justify-content-between">
+                            <label for="name" class="col-8 form-label">{{ recipeIngredient.quantity }} of {{ recipeIngredient.name }}</label>
+                            <button type="button" class="btn btn-danger col-1" title="delete ingredient" @click="removeIngredient(recipeIngredient.id)"><i class="mdi mdi-delete"></i></button>
                         </div>
                         <div>
                             <label for="instructions" class="col-12 form-label">Instructions:</label>
@@ -47,14 +65,18 @@ import { computed, reactive, onMounted, ref } from 'vue';
 import Pop from '../utils/Pop';
 import { logger } from '../utils/Logger';
 import { recipesService } from '../services/RecipesService';
+import { ingredientsService } from '../services/IngredientsService';
 export default {
     setup() {
         const editable = ref({})
+        const ingredient = ref({})
         return {
             editable,
+            ingredient,
             categories: ["All", "Cheese", "Italian", "Soup", "Mexican", "Specialty Coffee"],
             account: computed(() => AppState.account),
             activeRecipe: computed(() => AppState.activeRecipe),
+            recipeIngredients: computed(() => AppState.ingredients),
             async deleteRecipe(recipeId) {
                 try {
                     const yes = await Pop.confirm("Are you sure you want to delete your Recipe?")
@@ -79,6 +101,29 @@ export default {
                     await recipesService.updateRecipe(recipeId, recipeData)
                     editable.value = {}
                     this.changeModal()
+                } catch (error) {
+                    Pop.error(error)
+                    logger.error(error)
+                }
+            },
+            async addIngredient() {
+                try {
+                    const ingredientData = ingredient.value
+                    ingredientData.recipeId = AppState.activeRecipe.id
+                    await ingredientsService.addIngredient(ingredientData)
+                    ingredient.value = {}
+                } catch (error) {
+                    Pop.error(error)
+                    logger.error(error)
+                }
+            },
+            async removeIngredient(recipeId) {
+                try {
+                    if (AppState.account.id != AppState.activeRecipe.creatorId) {
+                        Pop.error("either you're not logged in or this isn't your recipe")
+                        return
+                    }
+                    await ingredientsService.removeIngredient(recipeId)
                 } catch (error) {
                     Pop.error(error)
                     logger.error(error)

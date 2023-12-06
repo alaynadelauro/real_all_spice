@@ -11,7 +11,9 @@
                     <p class="fs-5">Instructions:</p>
                     <p>{{ recipe.instructions }}</p>
                     <p class="fs-5">Ingredients:</p>
-                    <p v-for="ingredient in ingredients">{{ ingredient.name }}</p>
+                    <div v-for="ingredient in ingredients">
+                        <p>{{ ingredient.quantity }} of {{ ingredient.name }}</p>
+                    </div>
                     <div class="d-flex align-items-center justify-content-end">
                         <img :src="recipe.creator.picture" class="creator-picture rounded-circle me-3">
                         <p class="text-end mb-0">This recipe brought to you by {{ recipe.creator.name }}</p>
