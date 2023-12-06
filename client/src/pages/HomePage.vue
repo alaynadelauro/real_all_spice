@@ -27,6 +27,7 @@ import { AppState } from '../AppState.js';
 import { recipesService } from '../services/RecipesService.js';
 import { Modal } from 'bootstrap';
 import { favoritesService } from '../services/FavoritesService';
+import { ingredientsService } from '../services/IngredientsService';
 
 export default {
   setup() {
@@ -67,6 +68,7 @@ export default {
             Pop.error("something went wrong, recipe was not found")
           } else {
             AppState.activeRecipe = foundRecipe
+            ingredientsService.getIngredients(recipeId)
             if (AppState.account) {
               favoritesService.getFavorites()
             }

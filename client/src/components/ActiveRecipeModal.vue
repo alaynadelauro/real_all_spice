@@ -1,7 +1,7 @@
 <template>
     <div class="modal fade modal-lg" id="activeRecipeModal" tabindex="-1" aria-labelledby="activeRecipeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div v-if="ingredients" class="modal-content">
                 <div v-if="recipe" class="active-recipe-img modal-header" :style="{ backgroundImage: `url(${recipe.img})` }">
                     <h1 class="modal-title modal-title-personalized rounded-pill px-3" id="activeRecipeModalLabel">{{ recipe.title }}</h1>
                     <button type="button" class="btn text-light fs-1" data-bs-dismiss="modal" aria-label="Close"><i class="mdi mdi-close"></i></button>
@@ -11,7 +11,7 @@
                     <p class="fs-5">Instructions:</p>
                     <p>{{ recipe.instructions }}</p>
                     <p class="fs-5">Ingredients:</p>
-                    <p>socks and shoes and centipedes</p>
+                    <p v-for="ingredient in ingredients">{{ ingredient.name }}</p>
                     <div class="d-flex align-items-center justify-content-end">
                         <img :src="recipe.creator.picture" class="creator-picture rounded-circle me-3">
                         <p class="text-end mb-0">This recipe brought to you by {{ recipe.creator.name }}</p>
@@ -44,19 +44,35 @@ import { AppState } from '../AppState';
 import { Modal } from 'bootstrap';
 import Pop from '../utils/Pop';
 import { logger } from '../utils/Logger';
-import { favoritesService } from '../services/FavoritesService';
+import { favoritesService } from '../services/FavoritesService.js';
+import { ingredientsService } from '../services/IngredientsService.js'
 
 export default {
     setup() {
+        // NOTE this is on homepage set active recipe
+        // onMounted(() => {
+        //     getIngredients()
+        // })
+        // async function getIngredients() {
+        //     try {
+        //         const recipeId = AppState.activeRecipe.id
+        //         await ingredientsService.getIngredients(recipeId)
+        //     } catch (error) {
+        //         Pop.error(error)
+        //         logger.error(error)
+        //     }
+        // }
         return {
             recipe: computed(() => AppState.activeRecipe),
             account: computed(() => AppState.account),
+            ingredients: computed(() => AppState.ingredients),
             changeModal() {
                 Modal.getOrCreateInstance('#activeRecipeModal').hide()
                 Modal.getOrCreateInstance('#editRecipeModal').show()
             },
             async favoriteRecipe(recipeId) {
                 try {
+                    logger.log('modal getting favorites')
                     await favoritesService.favoriteRecipe(recipeId)
                 } catch (error) {
                     Pop.error(error)
