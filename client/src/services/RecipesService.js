@@ -24,10 +24,8 @@ class RecipesService {
         try {
             const res = await api.put(`api/recipes/${recipeId}`, recipeData)
             AppState.activeRecipe = new Recipe(res.data)
-            const recipe = AppState.recipes.find(recipe => recipe.id == recipeId)
-            if (!recipe) { return }
-            AppState.recipes.splice(recipe)
-            AppState.recipes.unshift(new Recipe(recipeData))
+            AppState.recipes.splice(recipe => recipe.id != AppState.activeRecipe.id, 1)
+            AppState.recipes.unshift(new Recipe(res.data))
         } catch (error) {
             logger.error(error)
         }
