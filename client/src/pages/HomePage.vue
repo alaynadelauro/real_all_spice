@@ -26,6 +26,7 @@ import { logger } from '../utils/Logger';
 import { AppState } from '../AppState.js';
 import { recipesService } from '../services/RecipesService.js';
 import { Modal } from 'bootstrap';
+import { favoritesService } from '../services/FavoritesService';
 
 export default {
   setup() {
@@ -64,7 +65,12 @@ export default {
           const foundRecipe = AppState.recipes.find(recipe => recipe.id == recipeId)
           if (!foundRecipe) {
             Pop.error("something went wrong, recipe was not found")
-          } else { AppState.activeRecipe = foundRecipe }
+          } else {
+            AppState.activeRecipe = foundRecipe
+            if (AppState.account) {
+              favoritesService.getFavorites()
+            }
+          }
           // logger.log(AppState.activeRecipe)
         } catch (error) {
           Pop.error(error)

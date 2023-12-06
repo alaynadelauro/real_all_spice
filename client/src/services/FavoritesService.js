@@ -23,6 +23,15 @@ class FavoritesService {
             logger.error(error)
         }
     }
+    async favoriteRecipe(recipeId) {
+        try {
+            const favorite = { recipeId: recipeId }
+            await api.post(`api/favorites`, favorite)
+            // logger.log("favorite created")
+        } catch (error) {
+            logger.error(error)
+        }
+    }
 }
 
 export const favoritesService = new FavoritesService()

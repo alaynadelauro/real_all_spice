@@ -10,7 +10,7 @@
                     <form class="row justify-content-center">
                         <div class="col-12">
                             <label for="title" class="form-label">Name:</label>
-                            <input v-model="editable.title" type="text" maxlength="255" class="form-control" :placeholder="activeRecipe.title">
+                            <input v-model="editable.title" type="text" maxlength="50" class="form-control" :placeholder="activeRecipe.title">
                         </div>
                         <div class="col-12">
                             <label for="category" class="form-label">Category:</label>
@@ -20,11 +20,11 @@
                         </div>
                         <div>
                             <label for="img" class=" col-12 form-label">Link to Image:</label>
-                            <input v-model="editable.img" type="text" class="form-control" :placeholder="activeRecipe.img">
+                            <input v-model="editable.img" type="text" maxlength="500" class="form-control" :placeholder="activeRecipe.img">
                         </div>
                         <div>
                             <label for="instructions" class="col-12 form-label">Instructions:</label>
-                            <textarea v-model="editable.instructions" class="form-control" :placeholder="activeRecipe.instructions">{{ activeRecipe.instructions }}</textarea>
+                            <textarea v-model="editable.instructions" class="form-control" maxlength="1000" :placeholder="activeRecipe.instructions">{{ activeRecipe.instructions }}</textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="deleteRecipe(activeRecipe.id)" title="delete recipe"><i class="mdi mdi-delete"></i></button>

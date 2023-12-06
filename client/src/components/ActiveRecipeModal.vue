@@ -21,9 +21,16 @@
                         <p><span class="fw-bold">Last Updated:</span> <br>{{ recipe.updatedAt }}</p>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button v-if="recipe.creatorId == account.id" type="button" class="btn btn-success text-light" @click="changeModal()">Edit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <button v-if="account.id" class="btn text-danger fs-4" title="favorite or unfavorite recipe. Warning: not reactive due to this being required to be from a modal.
+                        to check if this worked, visit the account page to see if it's there." @click="favoriteRecipe(recipe.id)"><i class="mdi mdi-heart"></i></button>
+                    </div>
+                    <div>
+                        <button v-if="recipe.creatorId == account.id" type="button" class="btn btn-success text-light me-3" @click="changeModal()">Edit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -32,9 +39,12 @@
 
 
 <script>
-import { computed, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
 import { AppState } from '../AppState';
 import { Modal } from 'bootstrap';
+import Pop from '../utils/Pop';
+import { logger } from '../utils/Logger';
+import { favoritesService } from '../services/FavoritesService';
 
 export default {
     setup() {
@@ -44,7 +54,15 @@ export default {
             changeModal() {
                 Modal.getOrCreateInstance('#activeRecipeModal').hide()
                 Modal.getOrCreateInstance('#editRecipeModal').show()
-            }
+            },
+            async favoriteRecipe(recipeId) {
+                try {
+                    await favoritesService.favoriteRecipe(recipeId)
+                } catch (error) {
+                    Pop.error(error)
+                    logger.error(error)
+                }
+            },
         }
     }
 }
