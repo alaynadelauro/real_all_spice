@@ -17,8 +17,8 @@
                         <p class="text-end mb-0">This recipe brought to you by {{ recipe.creator.name }}</p>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <p class="pe-4"><span class="fw-bold">Created At:</span><br>{{ recipe.createdAt }}</p>
-                        <p><span class="fw-bold">Last Updated:</span> <br>{{ recipe.updatedAt }}</p>
+                        <p v-if="recipe.createdAt" class="pe-4"><span class="fw-bold">Created At:</span><br>{{ recipe.createdAt }}</p>
+                        <p v-if="recipe.updatedAt"><span class="fw-bold">Last Updated:</span> <br>{{ recipe.updatedAt }}</p>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">

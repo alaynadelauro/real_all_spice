@@ -60,7 +60,7 @@ export default {
                     const yes = await Pop.confirm("Are you sure you want to delete your Recipe?")
                     if (!yes) { return }
                     await recipesService.deleteRecipe(recipeId)
-                    Modal.getInstance('#activeRecipeModal').hide()
+                    Modal.getOrCreateInstance('#editRecipeModal').hide()
                     AppState.activeRecipe = {}
                 } catch (error) {
                     Pop.error(error)
