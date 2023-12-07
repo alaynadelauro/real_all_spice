@@ -107,7 +107,7 @@ export default {
                 try {
                     const yes = await Pop.confirm("Remove from favorites?")
                     if (!yes) { return }
-                    // debugger
+                    debugger
                     const foundFavorite = await AppState.favorites.find(favorite => favorite.favoriteId == favoriteId)
                     if (!foundFavorite) { return } else {
                         await favoritesService.unfavorite(favoriteId)
