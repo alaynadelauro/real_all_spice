@@ -11,8 +11,9 @@
       </div>
       <div class="row mt-3 justify-content-evenly" v-if="recipes">
         <div class="col-md-3 col-sm-9 m-1 title-card rounded m-1 p-2" v-for="recipe in recipes" :key="recipe.id" @click="SetActiveRecipe(recipe.id)" type="button" data-bs-toggle="modal" data-bs-target="#activeRecipeModal">
-          <img :src="recipe.img" class="recipe-img w-100">
           <p class="mb-0 text-center">{{ recipe.title }}</p>
+          <img :src="recipe.img" class="recipe-img w-100">
+          <p class="text-center">{{ recipe.category }}</p>
         </div>
       </div>
     </div>
@@ -28,11 +29,14 @@ import { recipesService } from '../services/RecipesService.js';
 import { Modal } from 'bootstrap';
 import { favoritesService } from '../services/FavoritesService';
 import { ingredientsService } from '../services/IngredientsService';
+import { Favorite } from '../models/Favorite';
 
 export default {
   setup() {
     const categories = ["All", "Cheese", "Italian", "Soup", "Mexican", "Specialty Coffee"];
     const filteredCategory = ref("");
+    // NOTE moved this to the AppState
+    // let recipeFavorited = false
     onMounted(() => {
       getRecipes()
     })
@@ -47,6 +51,7 @@ export default {
     }
     return {
       categories,
+      // recipeFavorited,
       recipes: computed(() => {
         if (filteredCategory.value) {
           return AppState.recipes.filter((recipe) => recipe.category == filteredCategory.value)
@@ -69,8 +74,17 @@ export default {
           } else {
             AppState.activeRecipe = foundRecipe
             ingredientsService.getIngredients(recipeId)
-            if (AppState.account) {
-              favoritesService.getFavorites()
+            if (AppState.account.id) {
+              await favoritesService.getFavorites()
+              // debugger
+              const foundFavorite = AppState.favorites.find(favorite => favorite.id == recipeId)
+              if (foundFavorite) {
+                AppState.recipeFavorited = true
+                logger.log("this was favorited")
+              } else {
+                AppState.recipeFavorited = false
+                logger.log("this was not")
+              }
             }
           }
           // logger.log(AppState.activeRecipe)

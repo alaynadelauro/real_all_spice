@@ -1,6 +1,7 @@
 import { AppState } from "../AppState"
 import { Recipe } from "../models/Recipe"
 import { logger } from "../utils/Logger"
+import Pop from "../utils/Pop"
 import { api } from "./AxiosService"
 
 class RecipesService {
@@ -26,6 +27,23 @@ class RecipesService {
             AppState.activeRecipe = new Recipe(res.data)
             AppState.recipes.splice(recipe => recipe.id != AppState.activeRecipe.id, 1)
             AppState.recipes.unshift(new Recipe(res.data))
+        } catch (error) {
+            logger.error(error)
+        }
+    }
+    async createRecipe(recipeData) {
+        try {
+            const res = await api.post(`api/recipes`, recipeData)
+            AppState.recipes.unshift(new Recipe(res.data))
+            AppState.activeRecipe = new Recipe(res.data)
+        } catch (error) {
+            logger.error(error)
+        }
+    }
+    async getRecipeById(recipeId) {
+        try {
+            const res = await api.get(`api/recipes/${recipeId}`)
+            AppState.activeRecipe = new Recipe(res.data)
         } catch (error) {
             logger.error(error)
         }

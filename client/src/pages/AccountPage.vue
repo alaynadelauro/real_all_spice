@@ -75,6 +75,7 @@ export default {
     async function getAccountRecipes() {
       try {
         await recipesService.getRecipes()
+        AppState.recipes = AppState.recipes.filter(recipe => recipe.creatorId == AppState.account.id)
       } catch (error) {
         Pop.error(error)
         logger.error(error)

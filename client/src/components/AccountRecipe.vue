@@ -1,17 +1,24 @@
 <template>
     <div class="row mt-5 justify-content-center">
-        <div class="col-9">
-            <h3 class="favorite-card rounded-pill p-2 ps-5">Recipes Created By {{ account.name }}: </h3>
+        <div v-if="recipes.length >= 1" class="col-9">
+            <div class="d-flex justify-content-between favorite-card rounded-pill p-2 px-5">
+                <h3>Recipes Created By {{ account.name }}: </h3>
+                <button class="btn btn-success text-light" @click="summonCreateModal()">Create</button>
+            </div>
             <div class="row justify-content-evenly text-center height-and-scroll">
                 <div class="rounded col-md-3 col-9 favorite-card m-1 p-2" v-for="recipe in recipes" :key="recipe.id">
-                    <img :src="recipe.img" class="recipe-img rounded w-100" />
+                    <img type="button" @click="summonDetailModal(recipe.id)" :src="recipe.img" class="recipe-img rounded w-100" />
                     <h3>{{ recipe.title }}</h3>
                     <div class="d-flex justify-content-between">
-                        <button class="btn btn-info" title="edit recipe"><i class="mdi mdi-pen"></i></button>
+                        <button class="btn btn-info" title="edit recipe" @click="summonEditModal(recipe.id)"><i class="mdi mdi-pen"></i></button>
                         <button class="btn btn-danger" title="delete recipe" @click="deleteRecipe(recipe.id)"><i class="mdi mdi-delete"></i></button>
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else class="col-9 favorite-card rounded-pill p-2 px-5 d-flex justify-content-between">
+            <h3>{{ account.name }} has not created any recipes</h3>
+            <button class="btn btn-success text-light" @click="summonCreateModal()">Change That</button>
         </div>
     </div>
 </template>
@@ -23,6 +30,7 @@ import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
 import { logger } from '../utils/Logger';
 import { recipesService } from '../services/RecipesService';
+import { Modal } from 'bootstrap';
 
 export default {
     setup() {
@@ -38,6 +46,25 @@ export default {
                     Pop.error(error)
                     logger.error(error)
                 }
+            },
+            async summonDetailModal(recipeId) {
+                try {
+                    await recipesService.getRecipeById(recipeId)
+                    Modal.getOrCreateInstance('#activeRecipeModal').show()
+                } catch (error) {
+                    Pop.error(error)
+                }
+            },
+            async summonEditModal(recipeId) {
+                try {
+                    await recipesService.getRecipeById(recipeId)
+                    Modal.getOrCreateInstance('#editRecipeModal').show()
+                } catch (error) {
+                    Pop.error(error)
+                }
+            },
+            summonCreateModal() {
+                Modal.getOrCreateInstance('#createRecipeModal').show()
             }
         }
     }

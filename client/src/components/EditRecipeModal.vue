@@ -46,7 +46,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="deleteRecipe(activeRecipe.id)" title="delete recipe"><i class="mdi mdi-delete"></i></button>
-                            <button type="button" class="btn btn-success text-light" title="View Recipe" @click="changeModal()">Back</button>
+                            <button type="button" class="btn btn-success text-light" title="View Recipe" @click="changeModal()">View Details</button>
                             <button type="button" class="btn btn-primary" @click="updateRecipe(activeRecipe.id)">Save changes</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
